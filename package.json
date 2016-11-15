@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/mozilla-services/tigerblood.git"
+    "url": "git+ssh://git@github.com/mozilla-services/ip-reputation-js-client.git"
   },
-  "author": "",
+  "author": "Mozilla (https://mozilla.org/)",
   "license": "MPL-2.0",
   "bugs": {
-    "url": "https://github.com/mozilla-services/tigerblood/issues"
+    "url": "https://github.com/mozilla-services/ip-reputation-js-client/issues"
   },
-  "homepage": "https://github.com/mozilla-services/tigerblood#readme",
+  "homepage": "https://github.com/mozilla-services/ip-reputation-js-client#readme",
   "dependencies": {
     "bluebird": "3.4.6",
     "joi": "9.2.0",
