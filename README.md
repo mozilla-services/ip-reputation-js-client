@@ -16,6 +16,7 @@ const client = new IPReputationClient({
     key: '<a hawk key>',
     timeout: <number in ms>
 })
+```
 
 Get the reputation for an IP:
 
