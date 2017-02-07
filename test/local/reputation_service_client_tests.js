@@ -8,7 +8,8 @@ var client = new IPReputationClient({
   port: 8080,
   id: 'root',
   key: 'toor',
-  timeout: 50
+  timeout: 50,
+  https: false
 });
 
 test(
@@ -19,12 +20,28 @@ test(
       {port: 8080, id: 'root', key: 'toor'},
       {host: '127.0.0.1', id: 'root', key: 'toor'},
       {host: '127.0.0.1', port: 8080, key: 'toor'},
-      {host: '127.0.0.1', port: 8080, id: 'root'}
+      {host: '127.0.0.1', port: 8080, id: 'root'},
     ].forEach(function (badConfig) {
       t.throws(function () {
         return new IPReputationClient(badConfig);
       });
     });
+    t.end();
+  }
+);
+
+test(
+  'accepts valid hostname and tls config option',
+  function (t) {
+    var testClient = new IPReputationClient({
+      host: 'example.com',
+      port: 8080,
+      id: 'root',
+      key: 'toor',
+      timeout: 50,
+      https: true
+    });
+    t.ok(testClient);
     t.end();
   }
 );
@@ -130,7 +147,8 @@ test(
       port: 8080,
       id: 'root',
       key: 'toor',
-      timeout: 1 // ms
+      timeout: 1, // ms
+      https: false
     });
 
     timeoutClient.get('127.0.0.1').then(function () {}, function (error) {
@@ -145,7 +163,7 @@ test(
   function (t) {
     client.get('127.0.0.1').then(function (response) {
       t.equal(response.statusCode, 404);
-      return client.sendViolation('127.0.0.1', 'test_violation'); // created in scripts setup-test-db.sh
+      return client.sendViolation('127.0.0.1', 'test_violation'); // set 'violation_penalties: test_violation: 30' in tigerblood config.yml
     }).then(function (response) {
       t.equal(response.statusCode, 204);
       return client.get('127.0.0.1');
