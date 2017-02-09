@@ -135,23 +135,6 @@ test(
 );
 
 test(
-  'times out a GET request',
-  function (t) {
-    var timeoutClient = new IPReputationClient({
-      serviceUrl: 'http://10.0.0.0:8080/', // a non-routable host
-      id: 'root',
-      key: 'toor',
-      timeout: 1 // ms
-    });
-
-    timeoutClient.get('127.0.0.1').then(function () {}, function (error) {
-      t.notEqual(error.code, null);
-      t.end();
-    });
-  }
-);
-
-test(
   'sends a violation',
   function (t) {
     client.get('127.0.0.1').then(function (response) {
@@ -174,6 +157,40 @@ test(
     client.remove('127.0.0.1').then(function (response) {
       t.equal(response.statusCode, 200);
       t.equal(response.body, undefined);
+      t.end();
+    });
+  }
+);
+
+test(
+  'times out a GET request',
+  function (t) {
+    var timeoutClient = new IPReputationClient({
+      serviceUrl: 'http://10.0.0.0:8080/', // a non-routable host
+      id: 'root',
+      key: 'toor',
+      timeout: 1 // ms
+    });
+
+    timeoutClient.get('127.0.0.1').then(function () {}, function (error) {
+      t.notEqual(error.code, null);
+      t.end();
+    });
+  }
+);
+
+test(
+  'errors on invalid SSL cert',
+  function (t) {
+    var timeoutClient = new IPReputationClient({
+      serviceUrl: 'https://expired.badssl.com/',
+      id: 'root',
+      key: 'toor',
+      timeout: 1500 // ms
+    });
+
+    timeoutClient.get('127.0.0.1').then(function () {}, function (error) {
+      t.equal(error.code, 'CERT_HAS_EXPIRED');
       t.end();
     });
   }
