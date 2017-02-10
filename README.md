@@ -10,8 +10,7 @@ Create a client:
 const IPReputationClient = require('ip-reputation-service-client-js')
 
 const client = new IPReputationClient({
-    ip: '<tigerblood service IP address>',
-    port: '<tigerblood service port>',
+    serviceUrl: 'http://<tigerblood service host without trailing slash>',
     id: '<a hawk ID>',
     key: '<a hawk key>',
     timeout: <number in ms>
