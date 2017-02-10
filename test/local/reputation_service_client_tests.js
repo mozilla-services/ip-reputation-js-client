@@ -4,22 +4,34 @@
 var test = require('tap').test;
 var IPReputationClient = require('../../lib/client');
 var client = new IPReputationClient({
-  host: '127.0.0.1',
-  port: 8080,
+  serviceUrl: 'http://127.0.0.1:8080',
   id: 'root',
   key: 'toor',
   timeout: 50
 });
 
 test(
-  'throws exception when missing required config values',
+  'throws exception when missing one or more required config param',
   function (t) {
     [
       {},
-      {port: 8080, id: 'root', key: 'toor'},
-      {host: '127.0.0.1', id: 'root', key: 'toor'},
-      {host: '127.0.0.1', port: 8080, key: 'toor'},
-      {host: '127.0.0.1', port: 8080, id: 'root'}
+      {id: 'root', key: 'toor'},
+      {serviceUrl: 'https://127.0.0.1:8080', id: 'root'},
+      {serviceUrl: 'https://127.0.0.1:8080', key: 'toor'},
+    ].forEach(function (badConfig) {
+      t.throws(function () {
+        return new IPReputationClient(badConfig);
+      });
+    });
+    t.end();
+  }
+);
+
+test(
+  'throws exception for invalid serviceUrl scheme',
+  function (t) {
+    [
+      {serviceUrl: 'gopher://127.0.0.1:8080', id: 'root', key: 'toor'}
     ].forEach(function (badConfig) {
       t.throws(function () {
         return new IPReputationClient(badConfig);
@@ -123,11 +135,38 @@ test(
 );
 
 test(
+  'sends a violation',
+  function (t) {
+    client.get('127.0.0.1').then(function (response) {
+      t.equal(response.statusCode, 404);
+      return client.sendViolation('127.0.0.1', 'test_violation'); // set 'violation_penalties: test_violation: 30' in tigerblood config.yml
+    }).then(function (response) {
+      t.equal(response.statusCode, 204);
+      return client.get('127.0.0.1');
+    }).then(function (response) {
+      t.equal(response.statusCode, 200);
+      t.deepEqual(response.body, {'IP':'127.0.0.1','Reputation':70});
+      t.end();
+    });
+  }
+);
+
+test(
+  'cleans up inserted test reputation entry', // lets us run this multiple times without wiping the DB
+  function (t) {
+    client.remove('127.0.0.1').then(function (response) {
+      t.equal(response.statusCode, 200);
+      t.equal(response.body, undefined);
+      t.end();
+    });
+  }
+);
+
+test(
   'times out a GET request',
   function (t) {
     var timeoutClient = new IPReputationClient({
-      host: '10.0.0.0', // a non-routable host
-      port: 8080,
+      serviceUrl: 'http://10.0.0.0:8080/', // a non-routable host
       id: 'root',
       key: 'toor',
       timeout: 1 // ms
@@ -141,17 +180,17 @@ test(
 );
 
 test(
-  'sends a violation',
+  'errors on invalid SSL cert',
   function (t) {
-    client.get('127.0.0.1').then(function (response) {
-      t.equal(response.statusCode, 404);
-      return client.sendViolation('127.0.0.1', 'test_violation'); // created in scripts setup-test-db.sh
-    }).then(function (response) {
-      t.equal(response.statusCode, 204);
-      return client.get('127.0.0.1');
-    }).then(function (response) {
-      t.equal(response.statusCode, 200);
-      t.deepEqual(response.body, {'IP':'127.0.0.1','Reputation':70});
+    var timeoutClient = new IPReputationClient({
+      serviceUrl: 'https://expired.badssl.com/',
+      id: 'root',
+      key: 'toor',
+      timeout: 1500 // ms
+    });
+
+    timeoutClient.get('127.0.0.1').then(function () {}, function (error) {
+      t.equal(error.code, 'CERT_HAS_EXPIRED');
       t.end();
     });
   }
