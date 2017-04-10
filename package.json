@@ -19,7 +19,7 @@
   "dependencies": {
     "bluebird": "3.4.6",
     "joi": "10.2.1",
-    "request": "2.75.0"
+    "request": "2.81.0"
   },
   "devDependencies": {
     "coveralls": "2.11.14",
@@ -31,6 +31,7 @@
     "grunt-eslint": "18.0.0",
     "grunt-nsp": "2.3.1",
     "load-grunt-tasks": "3.5.0",
+    "native-hdr-histogram": "^0.4.4",
     "nyc": "8.3.2",
     "tap": "6.2.0",
     "walk": "2.3.x"
