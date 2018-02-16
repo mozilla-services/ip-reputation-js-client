@@ -18,7 +18,7 @@
   "homepage": "https://github.com/mozilla-services/ip-reputation-js-client#readme",
   "dependencies": {
     "bluebird": "3.4.6",
-    "joi": "10.2.1",
+    "joi": "12",
     "request": "^2.83.0"
   },
   "devDependencies": {
@@ -36,6 +36,6 @@
     "walk": "2.3.x"
   },
   "engines": {
-    "node": ">=0.10.0"
+    "node": ">=6"
   }
 }
