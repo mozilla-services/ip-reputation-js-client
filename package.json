@@ -1,6 +1,6 @@
 {
   "name": "ip-reputation-js-client",
-  "version": "2.1.4",
+  "version": "2.2.0",
   "description": "A node.js client library to the IP reputation service/Tigerblood",
   "main": "lib/client.js",
   "scripts": {
