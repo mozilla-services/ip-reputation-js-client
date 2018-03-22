@@ -9,6 +9,7 @@ var client = new IPReputationClient({
   key: 'toor',
   timeout: 50
 });
+var invalidIPError = new Error("Invalid IP.");
 
 test(
   'throws exception when missing one or more required config param',
@@ -73,6 +74,45 @@ test(
   }
 );
 
+test(
+  'does not get reputation for a invalid IP',
+  function (t) {
+    t.rejects(client.get('not-an-ip'), invalidIPError);
+    t.end();
+  }
+);
+
+test(
+  'does not add reputation for a invalid IP',
+  function (t) {
+    t.rejects(client.add('not-an-ip', 50), invalidIPError);
+    t.end();
+  }
+);
+
+test(
+  'does not update reputation for invalid IP',
+  function (t) {
+    t.rejects(client.update('not-an-ip', 5), invalidIPError);
+    t.end();
+  }
+);
+
+test(
+  'does not remove reputation for a invalid IP',
+  function (t) {
+    t.rejects(client.remove('not-an-ip'), invalidIPError);
+    t.end();
+  }
+);
+
+test(
+  'does not sendViolation for a invalid IP',
+  function (t) {
+    t.rejects(client.sendViolation('not-an-ip', 'test_violation'), invalidIPError);
+    t.end();
+  }
+);
 
 // the following tests need to run in order
 
