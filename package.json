@@ -32,7 +32,7 @@
     "grunt-nsp": "2.3.1",
     "load-grunt-tasks": "3.5.0",
     "nyc": "8.3.2",
-    "tap": "6.2.0",
+    "tap": "11.1",
     "walk": "2.3.x"
   },
   "engines": {
