@@ -19,7 +19,7 @@
   "dependencies": {
     "bluebird": "3.5.1",
     "joi": "13",
-    "request": "^2.83.0"
+    "request": "2.85"
   },
   "devDependencies": {
     "coveralls": "2.11.14",
