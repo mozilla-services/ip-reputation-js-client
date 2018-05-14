@@ -2,6 +2,8 @@
 
 Client library to send IP reputations to [the tigerblood service](https://github.com/mozilla-services/tigerblood).
 
+[![npm version](https://badge.fury.io/js/ip-reputation-js-client.svg)](https://www.npmjs.com/package/ip-reputation-js-client) [![Coverage Status](https://coveralls.io/repos/github/mozilla-services/ip-reputation-js-client/badge.svg?branch=master)](https://coveralls.io/github/mozilla-services/ip-reputation-js-client?branch=master) [![Build Status](https://travis-ci.org/mozilla-services/ip-reputation-js-client.svg?branch=master)](https://travis-ci.org/mozilla-services/ip-reputation-js-client)
+
 Usage:
 
 Create a client:
