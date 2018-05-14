@@ -63,17 +63,8 @@ client.sendViolation('127.0.0.1', 'exceeded-password-reset-failure-rate-limit').
 
 ## Development
 
-Tests run against [the tigerblood service](https://github.com/mozilla-services/tigerblood) to get that running:
+Tests run against [the tigerblood service](https://github.com/mozilla-services/tigerblood) with [docker-compose](https://docs.docker.com/compose/) from the ip-reputation-js-client repo root:
 
-1. `cd` to the tigerblood repo root
-1. Run `make build-container` to a docker image named `tigerblood_db` and `make build` to build tigerblood locally
-1. Run `docker run --rm -e POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 --name postgres-ip4r tigerblood_db` to start the tigerblood DB
-1. Run `lsof -i :5432` to check that postgres is listening on 5432
-1. Run `TIGERBLOOD_DSN='user=tigerblood dbname=tigerblood password=mysecretpassword sslmode=disable' ./tigerblood --config-file ~/ip-reputation-js-client/test/tigerblood.config.yml` to start tigerblood with the test config
-1. Run `lsof -i :8080` to check that tigerblood is listening on 8080
-
-Then from the ip-reputation-js-client repo root:
-
-1. Run `npm install` to install this library
-1. Run `npm test` to test the client against the tigerblood server
+1. Install [docker](https://docs.docker.com/install/) and [docker-compose](https://docs.docker.com/compose/install/)
+1. Run `docker-compose build` then `docker-compose run --rm test` (note: this may fail on the first run, but should work on subsequent runs due to the web and test containers not waiting long enough for the DB and web servers to start)
 1. Open `coverage/lcov-report/index.html` to see the coverage report

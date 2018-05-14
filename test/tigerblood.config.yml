@@ -1,4 +1,4 @@
-bind_attr: '127.0.0.1:8080'
+bind_attr: '0.0.0.0:8080'
 hawk: true
 profile: true
 hawk_credentials:

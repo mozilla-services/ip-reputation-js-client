@@ -3,8 +3,10 @@
 
 var test = require('tap').test;
 var IPReputationClient = require('../../lib/client');
+var TIGERBLOOD_ADDR = process.env.TIGERBLOOD_ADDR;
+
 var client = new IPReputationClient({
-  serviceUrl: 'http://127.0.0.1:8080',
+  serviceUrl: 'http://' + TIGERBLOOD_ADDR,
   id: 'root',
   key: 'toor',
   timeout: 50

@@ -1,0 +1,26 @@
+env:
+  - secure: "g5qUPtcVFO7b9WQWPpG+o/bFgCmkxpuX9+zTdbii7Av/vyhBRgJjNk+yEzWxQ3tDk7GTS5pqeA0HJl2gKk4ZGPZKgwxzwnZUh/xqqsPC/ylv7Tij1a+1VUPBVKH33Bt1z33jzMPGSHxNm+ve0PeisNFIC6ko9bpXWpkAsuT83bCd2tvq5UJA5xtm6qToGxP8vn6cWXmHfGlPJkjp+DeavFJoIqW28lDTkOsEJ5eMURZl48ixYE/qguDDLu4AbuARD53TeK47z+7JmWNVNm6CzJPFVOz4M+j3FOLpxhzfbQWMPAu7VMeEQiRw5g3KxuiamfLk3LXnE7wdSFamHD4xTKFgYrzpMBG6KGzLYJPld2bcL1rmhCn5V71eZqIzVn+LHxp7VVGGCFGySijw3UWA2udiVpfM53AMM9+hOGuW+rfhwzAwW/0jRwPVcv6r7/1kcKNeYchh1sgA9ijg+3fb1NIbbfAtcDWJ+ag+u0qeYY8H6TBsfYFYGe/knGG5B8huzahtS36m1dspacvkanAtF7pjIv7/M2uSlfGBzY1C3t6Ehn4TyLsyFLJDmDMqrMri2fBeSi2G9Xl3Rc/N+Lyx3H3zs/bvvuPTQAKZ4KK/K94tzNtYBtRetu+ucalSOb86FXhbJ9heXGd6j/8UUTdqj4kmLnBEUj9SlKGU3WEUqms="
+
+sudo: required
+services:
+  - docker
+
+language: node_js
+node_js:
+  - "8"
+#  - "10"
+
+before_install:
+  - npm install -g coveralls@3
+  - cd $TRAVIS_BUILD_DIR && docker-compose build --force-rm
+
+script:
+  - docker-compose up -d db
+  - sleep 15
+  - docker-compose up -d web
+  - sleep 15
+  - docker-compose run --rm test npm test
+  - coveralls < $TRAVIS_BUILD_DIR/coverage/lcov.info
+
+after_install:
+  - docker-compose rm -f -s test web db || true
