@@ -21,6 +21,7 @@ services:
   test:
     image: node:8-alpine
     environment:
+      - DEVELOPMENT=1
       - TIGERBLOOD_ADDR=web:8080
     links:
       - web
