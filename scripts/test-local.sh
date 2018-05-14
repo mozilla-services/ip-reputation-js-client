@@ -6,4 +6,4 @@
 
 node_modules/.bin/grunt lint copyright || exit 1
 node_modules/.bin/nyc tap test/local/reputation_service_client_tests.js
-node_modules/.bin/nyc report --reporter=text-lcov | node_modules/.bin/coveralls
+node_modules/.bin/nyc report --reporter=lcov

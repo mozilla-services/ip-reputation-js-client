@@ -179,7 +179,7 @@ test(
   function (t) {
     client.get('127.0.0.1').then(function (response) {
       t.equal(response.statusCode, 404);
-      return client.sendViolation('127.0.0.1', 'test_violation'); // set 'violation_penalties: test_violation: 30' in tigerblood config.yml
+      return client.sendViolation('127.0.0.1', 'test_violation'); // need 'violation_penalties: test_violation=30' in tigerblood config.yml
     }).then(function (response) {
       t.equal(response.statusCode, 204);
       return client.get('127.0.0.1');
