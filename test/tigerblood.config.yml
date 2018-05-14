@@ -1,0 +1,6 @@
+bind_attr: '127.0.0.1:8080'
+hawk: true
+profile: true
+hawk_credentials:
+  root: toor
+violation_penalties: test_violation=30
