@@ -142,7 +142,7 @@ test(
   function (t) {
     client.get('127.0.0.1').then(function (response) {
       t.equal(response.statusCode, 200);
-      t.deepEqual(response.body, {'IP':'127.0.0.1','Reputation':50});
+      t.deepEqual(response.body, {IP:'127.0.0.1', Reputation:50, Reviewed: false});
       t.end();
     });
   }
@@ -185,7 +185,7 @@ test(
       return client.get('127.0.0.1');
     }).then(function (response) {
       t.equal(response.statusCode, 200);
-      t.deepEqual(response.body, {'IP':'127.0.0.1','Reputation':70});
+      t.deepEqual(response.body, {IP:'127.0.0.1', Reputation:70, Reviewed: false});
       t.end();
     });
   }
