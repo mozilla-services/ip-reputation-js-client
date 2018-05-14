@@ -1,0 +1,19 @@
+sudo: required
+services:
+  - docker
+
+language: node_js
+node_js:
+  - "8"
+#  - "10"
+
+before_install:
+  - npm install -g coveralls@3
+  - cd $TRAVIS_BUILD_DIR && docker-compose build --force-rm
+
+script:
+  - docker-compose run --rm test npm test
+  - coveralls < $TRAVIS_BUILD_DIR/coverage/lcov.info
+
+after_install:
+  - docker-compose rm -f -s test web db || true
