@@ -11,7 +11,7 @@ var client = new IPReputationClient({
   key: 'toor',
   timeout: 50
 });
-var invalidIPError = new Error("Invalid IP.");
+var invalidIPError = new Error('Invalid IP.');
 
 test(
   'throws exception when missing one or more required config param',
