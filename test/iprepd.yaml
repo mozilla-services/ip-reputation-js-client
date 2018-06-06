@@ -1,0 +1,18 @@
+---
+listen: 0.0.0.0:8080
+redis:
+  addr: cache:6379
+auth:
+  hawk:
+    root: toor
+  disableauth: false
+violations:
+  - name: test_violation
+    penalty: 30
+    decreaselimit: 0
+decay:
+  points: 0
+  interval: 1m
+exceptions:
+  aws: false
+versionresponse: ./version.json

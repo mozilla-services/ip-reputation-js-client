@@ -3,15 +3,17 @@
 
 var test = require('tap').test;
 var IPReputationClient = require('../../lib/client');
-var TIGERBLOOD_ADDR = process.env.TIGERBLOOD_ADDR;
+var IPREPD_ADDR = process.env.IPREPD_ADDR;
 
 var client = new IPReputationClient({
-  serviceUrl: 'http://' + TIGERBLOOD_ADDR,
+  serviceUrl: 'http://' + IPREPD_ADDR,
   id: 'root',
   key: 'toor',
   timeout: 50
 });
 var invalidIPError = new Error('Invalid IP.');
+
+// Tests in this file are specifically ordered
 
 test(
   'throws exception when missing one or more required config param',
@@ -45,28 +47,7 @@ test(
 );
 
 test(
-  'does not get reputation for a nonexistent IP',
-  function (t) {
-    client.get('127.0.0.1').then(function (response) {
-      t.equal(response.statusCode, 404);
-      t.end();
-    });
-  }
-);
-
-test(
-  'does not update reputation for nonexistent IP',
-  function (t) {
-    client.update('127.0.0.1', 5).then(function (response) {
-      t.equal(response.statusCode, 404);
-      t.equal(response.body, undefined);
-      t.end();
-    });
-  }
-);
-
-test(
-  'does not remove reputation for a nonexistent IP',
+  'verify remove reputation for test IP',
   function (t) {
     client.remove('127.0.0.1').then(function (response) {
       t.equal(response.statusCode, 200);
@@ -77,17 +58,19 @@ test(
 );
 
 test(
-  'does not get reputation for a invalid IP',
+  'does not get reputation for a nonexistent IP',
   function (t) {
-    t.rejects(client.get('not-an-ip'), invalidIPError);
-    t.end();
+    client.get('127.0.0.1').then(function (response) {
+      t.equal(response.statusCode, 404);
+      t.end();
+    });
   }
 );
 
 test(
-  'does not add reputation for a invalid IP',
+  'does not get reputation for a invalid IP',
   function (t) {
-    t.rejects(client.add('not-an-ip', 50), invalidIPError);
+    t.rejects(client.get('not-an-ip'), invalidIPError);
     t.end();
   }
 );
@@ -116,24 +99,21 @@ test(
   }
 );
 
-// the following tests need to run in order
-
 test(
-  'adds reputation for new IP',
+  'update reputation for new IP',
   function (t) {
-    client.add('127.0.0.1', 50).then(function (response) {
-      t.equal(response.statusCode, 201);
+    client.update('127.0.0.1', 50).then(function (response) {
+      t.equal(response.statusCode, 200);
       t.end();
     });
   }
 );
 
 test(
-  'does not add reputation for existing IP',
+  'update reputation for existing IP',
   function (t) {
-    client.add('127.0.0.1', 50).then(function (response) {
-      t.equal(response.statusCode, 409);
-      t.equal(response.body, 'Reputation is already set for that IP.');
+    client.update('127.0.0.1', 75).then(function (response) {
+      t.equal(response.statusCode, 200);
       t.end();
     });
   }
@@ -144,18 +124,10 @@ test(
   function (t) {
     client.get('127.0.0.1').then(function (response) {
       t.equal(response.statusCode, 200);
-      t.deepEqual(response.body, {IP:'127.0.0.1', Reputation:50, Reviewed: false});
-      t.end();
-    });
-  }
-);
-
-test(
-  'updates reputation for existing IP',
-  function (t) {
-    client.update('127.0.0.1', 5).then(function (response) {
-      t.equal(response.statusCode, 200);
-      t.equal(response.body, undefined);
+      t.equal(response.body.reputation, 75);
+      t.equal(response.body.ip, '127.0.0.1');
+      t.equal(response.body.reviewed, false);
+      // also response.body.lastupdated, which is dynamic (time of previous test request)
       t.end();
     });
   }
@@ -181,20 +153,22 @@ test(
   function (t) {
     client.get('127.0.0.1').then(function (response) {
       t.equal(response.statusCode, 404);
-      return client.sendViolation('127.0.0.1', 'test_violation'); // need 'violation_penalties: test_violation=30' in tigerblood config.yml
+      return client.sendViolation('127.0.0.1', 'test_violation');
     }).then(function (response) {
-      t.equal(response.statusCode, 204);
+      t.equal(response.statusCode, 200);
       return client.get('127.0.0.1');
     }).then(function (response) {
       t.equal(response.statusCode, 200);
-      t.deepEqual(response.body, {IP:'127.0.0.1', Reputation:70, Reviewed: false});
+      t.equal(response.body.reputation, 70);
+      t.equal(response.body.ip, '127.0.0.1');
+      t.equal(response.body.reviewed, false);
       t.end();
     });
   }
 );
 
 test(
-  'cleans up inserted test reputation entry', // lets us run this multiple times without wiping the DB
+  'cleans up inserted test reputation entry',
   function (t) {
     client.remove('127.0.0.1').then(function (response) {
       t.equal(response.statusCode, 200);
