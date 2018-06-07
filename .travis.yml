@@ -15,7 +15,7 @@ before_install:
   - cd $TRAVIS_BUILD_DIR && docker-compose build --force-rm
 
 script:
-  - docker-compose up -d db
+  - docker-compose up -d cache
   - sleep 15
   - docker-compose up -d web
   - sleep 15
@@ -23,4 +23,4 @@ script:
   - coveralls < $TRAVIS_BUILD_DIR/coverage/lcov.info
 
 after_install:
-  - docker-compose rm -f -s test web db || true
+  - docker-compose rm -f -s test web cache || true

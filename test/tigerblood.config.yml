@@ -1,6 +1,0 @@
-bind_attr: '0.0.0.0:8080'
-hawk: true
-profile: true
-hawk_credentials:
-  root: toor
-violation_penalties: test_violation=30

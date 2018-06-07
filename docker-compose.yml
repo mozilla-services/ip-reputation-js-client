@@ -1,28 +1,24 @@
 version: '3'
 
 services:
-  db:
-    image: mozilla/tigerblood_test_db
+  cache:
+    image: redis:3.2
 
   web:
-    image: mozilla/tigerblood
+    image: mozilla/iprepd
     volumes:
-      - ${PWD}/test/tigerblood.config.yml:/app/config.yml
+      - ${PWD}/test/iprepd.yaml:/app/iprepd.yaml
     links:
-      - db
+      - cache
     expose:
       - "8080"
-    environment:
-      - TIGERBLOOD_BIND_ADDR=0.0.0.0:8080
-      - DEVELOPMENT=1
-      - TIGERBLOOD_DSN=host=db user=tigerblood dbname=tigerblood password=mysecretpassword sslmode=disable
-    command: web --config-file /app/config.yml
+    command: bin/iprepd
 
   test:
     image: node:8-alpine
     environment:
       - DEVELOPMENT=1
-      - TIGERBLOOD_ADDR=web:8080
+      - IPREPD_ADDR=web:8080
     links:
       - web
     volumes:

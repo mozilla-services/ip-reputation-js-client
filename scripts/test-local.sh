@@ -28,5 +28,5 @@ wait_for() {
 [ ! -z ${DEVELOPMENT+check} ] && wait_for web 8080 && sleep 3
 
 node_modules/.bin/grunt lint copyright || exit 1
-node_modules/.bin/nyc tap test/local/reputation_service_client_tests.js
+node_modules/.bin/nyc tap test/local/reputation_service_client_tests.js || exit 1
 node_modules/.bin/nyc report --reporter=lcov
