@@ -1,7 +1,7 @@
 {
   "name": "ip-reputation-js-client",
-  "version": "3.0.2",
-  "description": "A node.js client library to the IP reputation service/Tigerblood",
+  "version": "4.0.0",
+  "description": "A node.js client library to the IP reputation service/iprepd",
   "main": "lib/client.js",
   "scripts": {
     "test": "scripts/test-local.sh"
