@@ -1,8 +1,11 @@
 {
   "name": "ip-reputation-js-client",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "A node.js client library to the IP reputation service/iprepd",
   "main": "lib/client.js",
+  "files": [
+    "lib/client.js"
+  ],
   "scripts": {
     "test": "scripts/test-local.sh"
   },
