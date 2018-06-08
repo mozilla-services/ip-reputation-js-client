@@ -120,6 +120,18 @@ test(
 );
 
 test(
+  'client responses include timing information',
+  function (t) {
+    client.update('127.0.0.1', 75).then(function (response) {
+      t.notEqual(response.timingPhases, undefined);
+      t.notEqual(response.timingPhases.total, undefined);
+      t.type(response.timingPhases.total, 'number');
+      t.end();
+    });
+  }
+);
+
+test(
   'gets reputation for a existing IP',
   function (t) {
     client.get('127.0.0.1').then(function (response) {
