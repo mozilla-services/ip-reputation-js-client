@@ -202,8 +202,8 @@ test(
     });
 
     timeoutClient.get('127.0.0.1').then(function () {}, function (error) {
-      t.equal(error.code, 'ETIMEDOUT');
-      t.equal(error.connect, true);
+      // the bluebird .timeout error message
+      t.equal(error.message, 'operation timed out');
       t.end();
     });
   }
@@ -231,8 +231,8 @@ test(
     });
 
     var request = timeoutClient.get('127.0.0.1').then(function () {}, function (error) {
-      t.equal(error.code, 'ESOCKETTIMEDOUT');
-      t.notEqual(error.connect, true);
+      // the bluebird .timeout error message
+      t.equal(error.message, 'operation timed out');
       clearTimeout(timer);
       t.end();
     });
