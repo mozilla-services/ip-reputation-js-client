@@ -2,4 +2,3 @@ node_modules/
 coverage.html
 coverage/
 .nyc_output/
-/package-lock.json
