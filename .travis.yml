@@ -11,7 +11,8 @@ node_js:
 #  - "10"
 
 before_install:
-  - npm install -g coveralls@3
+  - npm install -g coveralls@3 npm@6
+  - npm audit
   - cd $TRAVIS_BUILD_DIR && docker-compose build --force-rm
 
 script:

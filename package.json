@@ -21,19 +21,18 @@
   "homepage": "https://github.com/mozilla-services/ip-reputation-js-client#readme",
   "dependencies": {
     "bluebird": "3.5.1",
-    "joi": "13",
-    "request": "2.85"
+    "joi": "13.4.0",
+    "request": "2.87.0"
   },
   "devDependencies": {
     "eslint-plugin-fxa": "1.0.0",
-    "grunt": "1.0.1",
+    "grunt": "1.0.3",
     "grunt-bump": "0.8.0",
     "grunt-cli": "1.2.0",
     "grunt-copyright": "0.3.0",
     "grunt-eslint": "18.0.0",
-    "grunt-nsp": "2.3.1",
     "load-grunt-tasks": "3.5.0",
-    "nyc": "8.3.2",
+    "nyc": "13.0.0",
     "tap": "11.1",
     "walk": "2.3.x"
   },
