@@ -10,7 +10,7 @@ var client = new IPReputationClient({
   serviceUrl: 'http://' + IPREPD_ADDR,
   id: 'root',
   key: 'toor',
-  timeout: 50
+  timeout: 150
 });
 var invalidIPError = new Error('Invalid IP.');
 
