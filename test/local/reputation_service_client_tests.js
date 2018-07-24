@@ -1,6 +1,7 @@
 /* Any copyright is dedicated to the Public Domain.
  * http://creativecommons.org/publicdomain/zero/1.0/ */
 
+var { spawn } = require('child_process');
 var test = require('tap').test;
 var IPReputationClient = require('../../lib/client');
 var IPREPD_ADDR = process.env.IPREPD_ADDR;
@@ -9,7 +10,7 @@ var client = new IPReputationClient({
   serviceUrl: 'http://' + IPREPD_ADDR,
   id: 'root',
   key: 'toor',
-  timeout: 50
+  timeout: 150
 });
 var invalidIPError = new Error('Invalid IP.');
 
@@ -191,7 +192,7 @@ test(
 );
 
 test(
-  'times out a GET request',
+  'times out connecting and making a GET',
   function (t) {
     var timeoutClient = new IPReputationClient({
       serviceUrl: 'http://10.0.0.0:8080/', // a non-routable host
@@ -201,9 +202,44 @@ test(
     });
 
     timeoutClient.get('127.0.0.1').then(function () {}, function (error) {
-      t.notEqual(error.code, null);
+      // the bluebird .timeout error message
+      t.equal(error.message, 'operation timed out');
       t.end();
     });
+  }
+);
+
+test(
+  'times out reading a GET request after connecting',
+  function (t) {
+    // fake a server listening but not writing a complete response
+    var nc = spawn('nc', ['-l', '-n', '-i', '2', '127.0.0.1', '-p', '8081']);
+    nc.on('error', (err) => {
+      t.notOk(err, 'failed to start nc subprocess.');
+      t.end();
+    });
+    nc.stdin.write('HEAD / HTTP/1.0\r\n\r\n');
+    nc.stdin.end();
+
+    var timeout = 500; // ms
+    var timer = null;
+    var timeoutClient = new IPReputationClient({
+      serviceUrl: 'http://127.0.0.1:8081/',
+      id: 'root',
+      key: 'toor',
+      timeout: timeout
+    });
+
+    var request = timeoutClient.get('127.0.0.1').then(function () {}, function (error) {
+      // the bluebird .timeout error message
+      t.equal(error.message, 'operation timed out');
+      clearTimeout(timer);
+      t.end();
+    });
+
+    timer = setTimeout(function (t, request) {
+      request.cancel();
+    }, timeout + 500, t, request);
   }
 );
 
