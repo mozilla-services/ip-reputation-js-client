@@ -7,7 +7,8 @@
     "lib/client.js"
   ],
   "scripts": {
-    "test": "scripts/test-local.sh"
+    "test": "scripts/test-local.sh",
+    "lint:deps": "npm audit --json | audit-filter --nsp-config=.nsprc --audit=-"
   },
   "repository": {
     "type": "git",
@@ -32,6 +33,7 @@
     "grunt-copyright": "0.3.0",
     "grunt-eslint": "18.0.0",
     "load-grunt-tasks": "3.5.0",
+    "audit-filter": "0.3.0",
     "nyc": "13.0.0",
     "tap": "11.1",
     "walk": "2.3.x"
