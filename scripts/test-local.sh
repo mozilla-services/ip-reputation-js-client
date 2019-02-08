@@ -27,6 +27,7 @@ wait_for() {
 # For example, docker-compose.yml sets 'DEVELOPMENT' to 1
 [ ! -z ${DEVELOPMENT+check} ] && wait_for web 8080 && sleep 3
 
+npm run-script lint:deps || exit 1
 node_modules/.bin/grunt lint copyright || exit 1
 node_modules/.bin/nyc tap test/local/reputation_service_client_tests.js || exit 1
 node_modules/.bin/nyc report --reporter=lcov
