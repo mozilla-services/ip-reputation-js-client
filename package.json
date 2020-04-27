@@ -8,7 +8,7 @@
   ],
   "scripts": {
     "test": "scripts/test-local.sh",
-    "lint:deps": "npm audit --json | audit-filter --nsp-config=.nsprc --audit=-"
+    "lint:deps": "npm audit --json"
   },
   "repository": {
     "type": "git",
