@@ -15,7 +15,7 @@ services:
     command: bin/iprepd
 
   test:
-    image: node:8-alpine
+    image: node:12-alpine
     environment:
       - DEVELOPMENT=1
       - IPREPD_ADDR=web:8080
