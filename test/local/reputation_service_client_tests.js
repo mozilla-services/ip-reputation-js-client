@@ -80,6 +80,14 @@ test(
 );
 
 test(
+  'does not get reputation for a invalid type',
+  function (t) {
+    t.rejects(client.getTyped('not-real', 'foobar'), new Error('Invalid type: not-real'));
+    t.end();
+  }
+);
+
+test(
   'does not get reputation for a invalid email',
   function (t) {
     t.rejects(client.getTyped('email', 'not-an-email'), invalidEmailError);
