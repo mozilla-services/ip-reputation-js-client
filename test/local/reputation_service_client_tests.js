@@ -13,6 +13,7 @@ var client = new IPReputationClient({
   timeout: 150
 });
 var invalidIPError = new Error('Invalid IP.');
+var invalidEmailError = new Error('Invalid Email.');
 
 // Tests in this file are specifically ordered
 
@@ -69,6 +70,32 @@ test(
 );
 
 test(
+  'does not get reputation for a nonexistent email',
+  function (t) {
+    client.getTyped('email', 'not-there@example.com').then(function (response) {
+      t.equal(response.statusCode, 404);
+      t.end();
+    });
+  }
+);
+
+test(
+  'does not get reputation for a invalid type',
+  function (t) {
+    t.rejects(client.getTyped('not-real', 'foobar'), new Error('Invalid type: not-real'));
+    t.end();
+  }
+);
+
+test(
+  'does not get reputation for a invalid email',
+  function (t) {
+    t.rejects(client.getTyped('email', 'not-an-email'), invalidEmailError);
+    t.end();
+  }
+);
+
+test(
   'does not get reputation for a invalid IP',
   function (t) {
     t.rejects(client.get('not-an-ip'), invalidIPError);
@@ -97,6 +124,26 @@ test(
   function (t) {
     t.rejects(client.sendViolation('not-an-ip', 'test_violation'), invalidIPError);
     t.end();
+  }
+);
+
+test(
+  'update reputation for new email',
+  function (t) {
+    client.updateTyped('email', 'picard@example.com', 50).then(function (response) {
+      t.equal(response.statusCode, 200);
+      t.end();
+    });
+  }
+);
+
+test(
+  'update reputation for existing email',
+  function (t) {
+    client.updateTyped('email', 'picard@example.com', 57).then(function (response) {
+      t.equal(response.statusCode, 200);
+      t.end();
+    });
   }
 );
 
@@ -133,7 +180,21 @@ test(
 );
 
 test(
-  'gets reputation for a existing IP',
+  'gets reputation for an existing IP (typed)',
+  function (t) {
+    client.getTyped('ip', '127.0.0.1').then(function (response) {
+      t.equal(response.statusCode, 200);
+      t.equal(response.body.reputation, 75);
+      t.equal(response.body.object, '127.0.0.1');
+      t.equal(response.body.reviewed, false);
+      // also response.body.lastupdated, which is dynamic (time of previous test request)
+      t.end();
+    });
+  }
+);
+
+test(
+  'gets reputation for an existing IP',
   function (t) {
     client.get('127.0.0.1').then(function (response) {
       t.equal(response.statusCode, 200);
@@ -141,6 +202,34 @@ test(
       t.equal(response.body.ip, '127.0.0.1');
       t.equal(response.body.reviewed, false);
       // also response.body.lastupdated, which is dynamic (time of previous test request)
+      t.end();
+    });
+  }
+);
+
+test(
+  'gets reputation for an existing email',
+  function (t) {
+    client.getTyped('email', 'picard@example.com').then(function (response) {
+      t.equal(response.statusCode, 200);
+      t.equal(response.body.reputation, 57);
+      t.equal(response.body.object, 'picard@example.com');
+      t.equal(response.body.reviewed, false);
+      t.end();
+    });
+  }
+);
+
+test(
+  'removes reputation for existing email',
+  function (t) {
+    client.removeTyped('email', 'picard@example.com').then(function (response) {
+      t.equal(response.statusCode, 200);
+      t.equal(response.body, undefined);
+      return client.getTyped('email', 'picard@example.com');
+    }).then(function (response) {
+      t.equal(response.statusCode, 404);
+      t.equal(response.body, undefined); // JSON.stringify() -> undefined
       t.end();
     });
   }
