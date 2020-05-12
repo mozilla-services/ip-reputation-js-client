@@ -1,10 +1,18 @@
-### iprepd (IP Reputation Service) node.js client library
+## iprepd (IP Reputation Service) node.js client library
 
-Client library to send IP reputations to [the iprepd service](https://github.com/mozilla-services/iprepd).
+Client library to send object reputations to [the iprepd service](https://github.com/mozilla-services/iprepd).
 
 [![npm version](https://badge.fury.io/js/ip-reputation-js-client.svg)](https://www.npmjs.com/package/ip-reputation-js-client) [![Coverage Status](https://coveralls.io/repos/github/mozilla-services/ip-reputation-js-client/badge.svg?branch=master)](https://coveralls.io/github/mozilla-services/ip-reputation-js-client?branch=master) [![Build Status](https://travis-ci.org/mozilla-services/ip-reputation-js-client.svg?branch=master)](https://travis-ci.org/mozilla-services/ip-reputation-js-client)
 
-Usage:
+### Overview
+
+iprepd is a service that supports storing and retrieving reputations associated with various object
+types, the most common being IP addresses but including others such as account names and email
+addresses. This library can be used by Node applications to integrate directly with this API.
+
+### Usage
+
+#### Functions
 
 Create a client:
 
@@ -18,6 +26,48 @@ const client = new IPReputationClient({
     timeout: <number in ms>
 })
 ```
+
+Get the reputation for an IP:
+
+```js
+client.getTyped('ip', '127.0.0.1').then(function (response) {
+    if (response && response.statusCode === 404) {
+        console.log('No reputation found for 127.0.0.1');
+    } else {
+        console.log('127.0.0.1 has reputation: ', response.body.reputation);
+    }
+});
+```
+
+Set the reputation for an IP:
+
+```js
+client.updateTyped('ip', '127.0.0.1', 79).then(function (response) {
+    console.log('Set reputation for 127.0.0.1 to 79.');
+});
+```
+
+Remove an IP:
+
+```js
+client.removeTyped('ip', '127.0.0.1').then(function (response) {
+    console.log('Removed reputation for 127.0.0.1.');
+});
+```
+
+Send a violation for an IP:
+
+```js
+client.sendViolationTyped('ip', '127.0.0.1', 'exceeded-password-reset-failure-rate-limit').then(function (response) {
+    console.log('Applied violation to 127.0.0.1.');
+});
+```
+
+#### Legacy functions
+
+Previous versions of iprepd only supported IP addresses; these functions remain as a compatibility
+layer for applications that still make use of them, and are essentially wrappers around the typed
+function calls.
 
 Get the reputation for an IP:
 
@@ -55,7 +105,7 @@ client.sendViolation('127.0.0.1', 'exceeded-password-reset-failure-rate-limit').
 });
 ```
 
-## Development
+### Development
 
 Tests run against [the iprepd service](https://github.com/mozilla-services/iprepd) with [docker-compose](https://docs.docker.com/compose/) from the ip-reputation-js-client repo root:
 
