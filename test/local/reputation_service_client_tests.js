@@ -128,6 +128,14 @@ test(
 );
 
 test(
+  'does not sendViolationTyped for a invalid IP',
+  function (t) {
+    t.rejects(client.sendViolationTyped('ip', 'not-an-ip', 'test_violation'), invalidIPError);
+    t.end();
+  }
+);
+
+test(
   'update reputation for new email',
   function (t) {
     client.updateTyped('email', 'picard@example.com', 50).then(function (response) {
@@ -263,6 +271,25 @@ test(
       t.equal(response.statusCode, 200);
       t.equal(response.body.reputation, 70);
       t.equal(response.body.ip, '127.0.0.1');
+      t.equal(response.body.reviewed, false);
+      t.end();
+    });
+  }
+);
+
+test(
+  'sends a typed violation',
+  function (t) {
+    client.get('127.0.0.2').then(function (response) {
+      t.equal(response.statusCode, 404);
+      return client.sendViolationTyped('ip', '127.0.0.2', 'test_violation');
+    }).then(function (response) {
+      t.equal(response.statusCode, 200);
+      return client.get('127.0.0.2');
+    }).then(function (response) {
+      t.equal(response.statusCode, 200);
+      t.equal(response.body.reputation, 70);
+      t.equal(response.body.ip, '127.0.0.2');
       t.equal(response.body.reviewed, false);
       t.end();
     });
