@@ -26,7 +26,6 @@
     "request": "2.87.0"
   },
   "devDependencies": {
-    "audit-filter": "0.3.0",
     "eslint-plugin-fxa": "1.0.0",
     "grunt": "1.0.4",
     "grunt-bump": "0.8.0",
