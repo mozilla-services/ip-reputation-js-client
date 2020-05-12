@@ -60,5 +60,8 @@ client.sendViolation('127.0.0.1', 'exceeded-password-reset-failure-rate-limit').
 Tests run against [the iprepd service](https://github.com/mozilla-services/iprepd) with [docker-compose](https://docs.docker.com/compose/) from the ip-reputation-js-client repo root:
 
 1. Install [docker](https://docs.docker.com/install/) and [docker-compose](https://docs.docker.com/compose/install/)
-1. Run `docker-compose build` then `docker-compose run --rm test` (note: this may fail on the first run, but should work on subsequent runs due to the web and test containers not waiting long enough for the cache and web servers to start)
+1. Run `docker-compose build`.
+1. Run `docker-compose run --rm test npm install` to collect package dependencies.
+1. Run `docker-compose run --rm test` to test.
 1. Open `coverage/lcov-report/index.html` to see the coverage report
+1. Run `docker-compose down` when you are finished running tests to remove cache and web containers.
