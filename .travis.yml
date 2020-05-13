@@ -18,7 +18,7 @@ script:
   - sleep 15
   - docker-compose up -d web
   - sleep 15
-  - docker-compose run --rm test npm test
+  - docker-compose run --rm test
   - coveralls < $TRAVIS_BUILD_DIR/coverage/lcov.info
 
 after_install:

@@ -1,6 +1,6 @@
 {
   "name": "ip-reputation-js-client",
-  "version": "5.0.0",
+  "version": "6.0.0",
   "description": "A node.js client library to the IP reputation service/iprepd",
   "main": "lib/client.js",
   "files": [
@@ -26,7 +26,6 @@
     "request": "2.87.0"
   },
   "devDependencies": {
-    "audit-filter": "0.3.0",
     "eslint-plugin-fxa": "1.0.0",
     "grunt": "1.0.4",
     "grunt-bump": "0.8.0",
