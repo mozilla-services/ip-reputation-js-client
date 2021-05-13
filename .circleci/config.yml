@@ -1,0 +1,47 @@
+version: 2.1
+
+workflows:
+  test:
+    jobs:
+      - test
+
+jobs:
+  test:
+    docker:
+      - image: node:12
+        # auth:
+        #   username: $DOCKER_USER
+        #   password: $DOCKER_PASS
+    # working_directory: ~/
+    steps:
+      - checkout
+      - run:
+          name: Install curl and git
+          command: |
+            apt-get update -y && apt-get install -y curl git
+      - run:
+          name: Install Docker
+          command: |
+            apt-get install -y apt-transport-https ca-certificates gnupg lsb-release
+            curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+            echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian \
+                $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+            apt-get update -y && apt-get install -y docker-ce docker-ce-cli containerd.io
+      - run:
+          name: Install Docker Compose
+          command: |
+            curl -L https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m) > ~/docker-compose
+            chmod +x ~/docker-compose
+            mv ~/docker-compose /usr/local/bin/docker-compose
+      - setup_remote_docker
+      - run:
+          name: build web-ci and test-ci
+          command: |
+            /usr/local/bin/docker-compose build web-ci test-ci
+      - run:
+          name: run web and cache with Docker Compose
+          command: |
+            /usr/local/bin/docker-compose up -d web-ci
+      - run:
+          name: test
+          command: /usr/local/bin/docker-compose run --rm test-ci

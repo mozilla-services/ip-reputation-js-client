@@ -1,3 +1,13 @@
-/\.*
-/node_modules
-/package-lock.json
+.git/
+.gitignore
+.circleci/
+.travis.yml
+
+node_modules/
+Dockerfile
+docker-compose.yml
+
+coverage
+.nyc_output/
+
+*.tgz

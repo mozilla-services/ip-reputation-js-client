@@ -24,3 +24,20 @@ services:
       - ${PWD}:/ip-reputation-js-client-test
     working_dir: /ip-reputation-js-client-test
     command: npm test
+
+  web-ci:
+    build:
+      context: test/
+    links:
+      - cache
+    expose:
+      - "8080"
+
+  test-ci:
+    build:
+      context: .
+    environment:
+      - IPREPD_ADDR=web-ci:8080
+    links:
+      - web
+    command: npm test
