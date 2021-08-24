@@ -1,6 +1,6 @@
 {
   "name": "ip-reputation-js-client",
-  "version": "6.0.3",
+  "version": "6.0.4",
   "description": "A node.js client library to the IP reputation service/iprepd",
   "main": "lib/client.js",
   "files": [
@@ -34,7 +34,7 @@
     "grunt-eslint": "18.0.0",
     "load-grunt-tasks": "3.5.0",
     "nyc": "14.1.1",
-    "tap": "15.0.5",
+    "tap": "15.0.9",
     "walk": "2.3.x"
   },
   "engines": {
