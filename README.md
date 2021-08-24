@@ -2,7 +2,7 @@
 
 Client library to send object reputations to [the iprepd service](https://github.com/mozilla-services/iprepd).
 
-[![npm version](https://badge.fury.io/js/ip-reputation-js-client.svg)](https://www.npmjs.com/package/ip-reputation-js-client) [![Coverage Status](https://coveralls.io/repos/github/mozilla-services/ip-reputation-js-client/badge.svg?branch=main)](https://coveralls.io/github/mozilla-services/ip-reputation-js-client?branch=main) [![Build Status](https://travis-ci.org/mozilla-services/ip-reputation-js-client.svg?branch=main)](https://travis-ci.org/mozilla-services/ip-reputation-js-client)
+[![npm version](https://badge.fury.io/js/ip-reputation-js-client.svg)](https://www.npmjs.com/package/ip-reputation-js-client) [![Coverage Status](https://coveralls.io/repos/github/mozilla-services/ip-reputation-js-client/badge.svg?branch=main)](https://coveralls.io/github/mozilla-services/ip-reputation-js-client?branch=main) [![CircleCI](https://circleci.com/gh/mozilla-services/ip-reputation-js-client/tree/main.svg?style=svg)](https://circleci.com/gh/mozilla-services/ip-reputation-js-client/tree/main)
 
 ### Overview
 
