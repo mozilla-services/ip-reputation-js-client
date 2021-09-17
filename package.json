@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "eslint-plugin-fxa": "1.0.0",
-    "grunt": "1.3.0",
+    "grunt": "1.4.1",
     "grunt-bump": "0.8.0",
     "grunt-cli": "1.2.0",
     "grunt-copyright": "0.3.0",
